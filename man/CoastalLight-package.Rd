@@ -13,14 +13,14 @@ Satellite data collected between 1998 and 2018
 	the irradiance reaching the bottom of the coastal ocean.
 }
 \details{
-This package has \strong{two goals} :
+This package has \strong{two goals}:
 \enumerate{
   \item calculate the surface area of the sea floor which receives more than a given threshold of irradiance.
   \item get various geographic and optical data from a database consisting of files to download
 }
 \describe{
-  \item{Goal 1}{: 
-    \enumerate{
+  \item{Goal 1:}
+  \enumerate{
       \item function \code{cl_surface()} is the main function;
             it returns the surface areas receiving irradiance above given thresholds,
             or the P-functions (see Gattuso et al. - reference below) for three standard regions;
@@ -35,8 +35,7 @@ This package has \strong{two goals} :
             a file containing the P-functions for this subregion;
             this file is ready to be used by the function \code{cl_surface()}.
     }
-  }
-  \item{Goal 2}{:
+  \item{Goal 2:}
     \enumerate{
       \item function \code{cl_DownloadData()} downloads the data;
       \item function \code{cl_GetData()} gets the data on a geographic zone defined by the user;
@@ -44,9 +43,8 @@ This package has \strong{two goals} :
       \item function \code{cl_Transect()} complements function \code{cl_GetData()}
             for the extraction of data along a transect.
     }
-  }
 }
-\strong{Data and units :}
+\strong{Data and units}:
   \itemize{
     \item P-functions : \%
     \item longitude : \eqn{decimal \, degree \; [-180 ; 180]}
