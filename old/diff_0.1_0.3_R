@@ -1,0 +1,60 @@
+diff -r CoastalLight_0.1/R/cl_PlotData.R CoastalLight/R/cl_PlotData.R
+22,23c33,34
+< #' ## See function cl_GetData() examples
+< cl_PlotData <- function(x) {
+---
+> #' ## See function \code{cl_GetData()} examples
+> cl_PlotData <- function(x, vertices = NULL) {
+34,46c45,46
+< 		r <- raster(xmn = min(lon), xmx = max(lon), ymn = min(lat), ymx = max(lat), resolution = 1./240.)
+< 		begin <- TRUE
+< 		for(w in what) {
+< 			cat("Rasterize", w, "\n")
+< 			y <- rasterize(x$data[, c("longitude", "latitude")], r, x$data[, w], fun = mean, na.rm = TRUE)
+< 			if(begin) {
+< 				begin <- FALSE
+< 				s <- y
+< 			} else {
+< 				s <- stack(s, y)
+< 			}
+< 		}
+< 		names(s) <- what
+---
+> 		s <- clu_rasterize(x)
+> 		if(!is.null(vertices)) transect <- spLines(t(as.data.frame.list(vertices)), crs = crs(s))
+98c98,99
+< 				plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
+---
+> 				if(is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
+> 				if(!is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90", addfun = function() lines(transect))
+105c106,107
+< 				plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
+---
+> 				if(is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
+> 				if(!is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90", addfun = function() lines(transect))
+170a173,195
+> 				ylim = c(min.all[w], max.all[w]),
+> 				log = log.all[w], axes = FALSE, xlab = "", ylab = "")
+> 			magaxis2(side = sid.all[w], line = lin.all[w], col.ticks = col.all[w], col.axis = "white"   , col = "white"   , lty = 1         , lwd.axis = 2, lwd.ticks = 2, mgp = c(lin.all[w] + 1.25, lin.all[w] + 0.5, lin.all[w]))
+> 			magaxis2(side = sid.all[w], line = lin.all[w], col.ticks = col.all[w], col.axis = col.all[w], col = col.all[w], lty = lty.all[w], lwd.axis = 2, lwd.ticks = 2, mgp = c(lin.all[w] + 1.25, lin.all[w] + 0.5, lin.all[w]))
+> 			mtext(w, side = sid.all[w], line = lin.all[w] + 1.25, col = col.all[w])
+> 		}
+> 		par(mai = omai, mgp = omgp)
+> 		return(invisible(NULL))
+> 	}
+> 	if(type == "Transect") {
+> 		u <- x$distances
+> 		omai <- par("mai"); omgp <- par("mgp")
+> 		par(mai = par("mai") * c(1, 2, 1, 3), mgp = par("mgp") / 2)
+> 		plot(u, rep(0, length(u)), type = "n", axes = FALSE, xlab = "distance [km]", ylab = "",
+> 			xlim = range(u),
+> 			main = "")
+> 		box()
+> 		axis(1)
+> 		for(w in what) {
+> 			par(new = TRUE)
+> 			dataw <- x$data[, w]
+> 			plot(u, dataw, type = "l", lty = lty.all[w], col = col.all[w], lwd = 2,
+> 				xlim = range(u),
+Only in CoastalLight/R: cl_Transect.R
+Only in CoastalLight/R: clu_rasterize.R

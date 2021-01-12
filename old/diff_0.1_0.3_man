@@ -1,0 +1,232 @@
+diff -r CoastalLight_0.1/man/cl_DownloadData.Rd CoastalLight/man/cl_DownloadData.Rd
+11,14c11,13
+< \item{month}{: [integer] the month (0-12);
+< if 0 gives the global value;
+< if 1 < month < 12 gives the values for a single month (1 = January, ...);
+< (default = 0)}
+---
+> \item{month}{: [integer] decimal month (0-12). Default = 0.
+> 0 indicates the climatology over 21 years (1998-2018).
+> 1 to 12 indicates the decimal value for a single month (1 = January, ...);}
+16,17c15,16
+< \item{DownloadGeo}{: [logical] do you want to download the "geographic" file - a file containing
+< longitude-latitude-depth-surface of the pixels, mandatory for retrieving pixel locations
+---
+> \item{DownloadGeo}{: [logical] download the "geographic" file containing
+> longitude, latitude, depth and surface area of the pixels, mandatory for retrieving pixel locations
+20c19
+< \item{dirdata}{: [character] The directory where the files are stored (default = "CoastalLight.d");}
+---
+> \item{dirdata}{: [character] The directory where the files are stored (default = "./CoastalLight.d");}
+
+
+
+
+diff -r CoastalLight_0.1/man/cl_GetData.Rd CoastalLight/man/cl_GetData.Rd
+17,18c17,24
+< \item{what}{: [character] a vector of the quantities to extract, choose among
+<               "depth", "area", "par", "kdpar", "parbottom". Default is all of them.
+---
+> \item{what}{: [character] a vector of the variables to extract among
+> "depth", "area", "par", "kdpar" and "parbottom". 
+> Several variables can be listed. Default is all of them.
+> Note that longitude and latitude are automatically added to the variables.}
+> 
+> \item{dirdata}{: [character] The directory where the data files
+> (previouly downloaded with the function \code{cl_DownloadData()})
+> are stored. (default = "./CoastalLight.d");}
+20,31c26,27
+<               N.B. : longitude and latitude will be automatically added to the quantities.}
+< 
+< \item{dirdata}{: [character] The directory where the data files are stored
+< 
+<                  (default = "CoastalLight.d");
+< 
+<                  Data files must have been previouly downloaded with function
+< 
+<                  \code{cl_DownloadData()}}
+< 
+< \item{month}{: [integer] : the month ([0-12] of interest. 0 indicate the global data,
+< the climatology over the 21 years (1998-2018), 1 is january, ...}
+---
+> \item{month}{: [integer] : the decimal value of the month ([0-12] of interest. 0 indicate
+> the climatology over 21 years (1998-2018), 1 is January, ...}
+41c37
+<                          and quantities asked (see argument what) 
+---
+>                          and variables requested. 
+46,48c42,44
+< point, a longitudinal transect , a latitudinal transect, or an area. 
+< The type of geographic zone depends on the way the arguments \code{lon} and \code{lat}
+< are passed to the function (see details)
+---
+> single geographic point, a longitudinal transect, a latitudinal transect, or an area. 
+> The type of geographic zone depends the arguments \code{lon} and \code{lat}
+> passed to the function (see details)
+51c47
+< There are 4 possibilities :
+---
+> There are 4 options for parameters \code{lon} and \code{lat}:
+57a54,57
+> To get data along an ordinary transect (i.e. a polygonal line, given by its vertices)
+> you have, in a first time, to get data in an "Area" containing this polygonal line,
+> and, in a second time, to use function \code{cl_Transect()} in order to extract data along the transect
+> (see example of this function).
+61,62c61
+< ## all examples suppose that you have downloaded data with function cl_DownloadData()
+< ## in directory "CoastalLight.d"
+---
+> ## All examples assume that data have been downloaded in directory "CoastalLight.d" with function cl_DownloadData()
+64c63
+< ## an Area
+---
+> ## Area
+
+
+
+
+diff -r CoastalLight_0.1/man/cl_PlotData.Rd CoastalLight/man/cl_PlotData.Rd
+5c5,6
+< \title{This function plots the data, as returned by function \code{cl_GetData()}}
+---
+> \title{Plots the data returned by function \code{cl_GetData()}
+> or function \code{cl_Transect()}}
+7c8
+< cl_PlotData(x)
+---
+> cl_PlotData(x, vertices = NULL)
+10a12,19
+> 
+> \item{vertices}{: [list] a polygonal line that represents a transect;
+> each element of this list is a geographic point,
+> i.e. a vector of length 2 (longitude, latitude); default is NULL;
+> this argument is only used if type is "Area" in order to add
+> a transect to the maps.
+> N.B. : function \code{cl_Transect()} has an optional argument (\code{plt})
+>        to plot the transect on the maps.}
+14c23
+< \item a rasterstack if type is "Area"
+---
+> \item a rasterstack with all variables if type is "Area"
+19,20c28,29
+< Function \code{cl_GetData()} return a list; 
+< plot differ according the field \code{type} of this list :
+---
+> Functions \code{cl_GetData()} or \code{cl_Transect()} return a list; 
+> plot differ depending on the field \code{type} of this list :
+23,25c32,36
+<     \item{"LonTransect"}{quantities are plotted VS longitude}
+<     \item{"LatTransect"}{quantities are plotted VS latitude}
+<     \item{"Area"}{geographic maps of the quantities}
+---
+>     \item{"LonTransect"}{variables are plotted vs longitude}
+>     \item{"LatTransect"}{variables are plotted vs latitude}
+>     \item{"Area"}{geographic maps of the variables are produced}
+>     \item{"Transect"}{variables are plotted vs the distance traveled
+>                      from the first vertex of the polygonal line}
+29c40
+< ## See function cl_GetData() examples
+---
+> ## See function \\code{cl_GetData()} examples
+
+
+
+
+diff -r CoastalLight_0.1/man/cl_subregion.Rd CoastalLight/man/cl_subregion.Rd
+10,11c10,11
+< \item{browse}{: [logical] do you want to connect to the server with your default navigator ? (default = TRUE)
+< if FALSE no connection, but the url is returned
+---
+> \item{browse}{: [logical] do you want to connect to the server with your default navigator ? (default = TRUE).
+> If FALSE no connection, but the url is returned
+19c19
+< Connects to a server in order to calculate and download a P-function for a subregion of one of the three basic regions
+---
+> Connects to a server in order to calculate and download a P-function for a subregion of one of the three standard regions
+
+
+
+diff -r CoastalLight_0.1/man/cl_surface.Rd CoastalLight/man/cl_surface.Rd
+10,12c10,11
+< \item{region}{: [character] choose among : "NonPolar" "Arctic" "Antarctic"
+< 
+<                 or give the name of a subregion of one of these three regions; example :
+---
+> \item{region}{: [character] choose among : "NonPolar", "Arctic" and "Antarctic"
+>                 or give the name of a subregion of one of these three regions. For example :
+16c15
+<                 In this case give to parameter region the value "NonPolar.med".}
+---
+>                 In this case pass "NonPolar.med".}
+27c26
+< \item{dir}{: [character] only used if region is not one of the three basic regions but a subregion;
+---
+> \item{dir}{: [character] only used if region is not one of the three standard regions but a subregion;
+30c29
+< ( default = "." - current directory )}
+---
+> ( default = ".", that is the current directory )}
+33c32
+< if type == "Sg" [numeric] : an unique value (surface of the region in km2)
+---
+> if type == "Sg" [numeric] : an unique value (surface area of the region in km2)
+35c34
+< if type == "s" [numeric vector] : surfaces in km2 collecting more than E mol photons m-2 day-1
+---
+> if type == "s" [numeric vector] : surface areas in km2 receiving more than E mol photons m-2 day-1
+39c38
+< if type == "E" [numeric vector] : discrete values of E used for tabulate P-functions
+---
+> if type == "E" [numeric vector] : discrete values of E used for tabulated P-functions
+42c41
+< This function is the main function of the package. It operates on the three basic regions "NonPolar" "Arctic", and "Antarctic"
+---
+> This function is the main function of the package. It operates on the three standard regions "NonPolar", "Arctic", and "Antarctic"
+46c45
+< this function uses the Pfunction file :
+---
+> This function uses the Pfunction file :
+Only in CoastalLight/man: cl_Transect.Rd
+
+
+
+
+diff -r CoastalLight_0.1/man/CoastalLight-package.Rd CoastalLight/man/CoastalLight-package.Rd
+18c18
+<   \item calculate the surface area that receives more than a given threshold of irradiance.
+---
+>   \item calculate the surface area of the sea floor which receives more than a given threshold of irradiance.
+22c22
+<   \item{Goal 1}{: 
+---
+>   \item{Goal 1}{ 
+26c26
+<             or the P-functions (see Gattuso 2019) for three basic regions;
+---
+>             or the P-functions (see Gattuso et al. in prep.) for three standard regions;
+28,29c28,29
+<             It is the only function you have to deal with if you are interested in one of these
+<             basic regions;
+---
+>             It is the only function to use if you are interested in one of these
+>             standard regions;
+33c33
+<             of a \strong{subregion of one of the three basic regions};
+---
+>             of a \strong{subregion of one of the three standard regions};
+39c39
+<   \item{Goal 2}{:
+---
+>   \item{Goal 2}{
+43a44,45
+>       \item function \code{cl_Transect()} complements function \code{cl_GetData()}
+>             for the extraction of data along a transect.
+50,53c52,54
+<             Gattuso etal,
+<             Global distribution of light (photosynthetically active radiations)
+<             reaching the seabed,
+<             2019
+---
+>             Gattuso J.-P., Gentili B., Antoine D. & Doxaran D., in prep. 
+>             Global distribution of light (photosynthetically active radiation) reaching the seabed. 
+>             Earth System Science Data.

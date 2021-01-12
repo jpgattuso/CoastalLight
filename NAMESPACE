@@ -1,0 +1,8 @@
+exportPattern("cl_surface", "cl_subregion", "cl_GetData", "cl_DownloadData", "cl_PlotData", "cl_Transect")
+# Import all packages listed as Imports or Depends
+import(ncdf4, raster, sp, viridis)
+importFrom("utils", "download.file")
+importFrom("utils", "read.table")
+importFrom("stats", "approx")
+importFrom("utils", "browseURL")
+importFrom("graphics", "abline", "axis", "box", "mtext", "par")

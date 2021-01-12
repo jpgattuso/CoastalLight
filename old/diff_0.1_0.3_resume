@@ -1,0 +1,17 @@
+Files CoastalLight_0.1/DESCRIPTION and CoastalLight/DESCRIPTION differ
+Files CoastalLight_0.1/man/cl_DownloadData.Rd and CoastalLight/man/cl_DownloadData.Rd differ
+Files CoastalLight_0.1/man/cl_GetData.Rd and CoastalLight/man/cl_GetData.Rd differ
+Files CoastalLight_0.1/man/cl_PlotData.Rd and CoastalLight/man/cl_PlotData.Rd differ
+Files CoastalLight_0.1/man/cl_subregion.Rd and CoastalLight/man/cl_subregion.Rd differ
+Files CoastalLight_0.1/man/cl_surface.Rd and CoastalLight/man/cl_surface.Rd differ
+Only in CoastalLight/man: cl_Transect.Rd
+Files CoastalLight_0.1/man/CoastalLight-package.Rd and CoastalLight/man/CoastalLight-package.Rd differ
+Files CoastalLight_0.1/NAMESPACE and CoastalLight/NAMESPACE differ
+Files CoastalLight_0.1/R/cl_DownloadData.R and CoastalLight/R/cl_DownloadData.R differ
+Files CoastalLight_0.1/R/cl_GetData.R and CoastalLight/R/cl_GetData.R differ
+Files CoastalLight_0.1/R/cl_PlotData.R and CoastalLight/R/cl_PlotData.R differ
+Files CoastalLight_0.1/R/cl_subregion.R and CoastalLight/R/cl_subregion.R differ
+Files CoastalLight_0.1/R/cl_surface.R and CoastalLight/R/cl_surface.R differ
+Only in CoastalLight/R: cl_Transect.R
+Only in CoastalLight/R: clu_rasterize.R
+Files CoastalLight_0.1/R/CoastalLight.R and CoastalLight/R/CoastalLight.R differ

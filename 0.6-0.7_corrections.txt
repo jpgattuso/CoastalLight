@@ -1,0 +1,100 @@
+FAIT :    Dans help(CoastalLight) corriger la référence de l’article: Gattuso J.-P., Gentili B., Antoine D. & Doxaran D., 2020. Global distribution of photosynthetically available radiation on the seafloor. Earth System Science Data 12:1697-1709. http://dx.doi.org/10.5194/essd-12-1697-2020
+
+FAIT :    - Dans help(CoastalLight) corriger les “useful links” (tous les urls sont sur la même ligne
+
+FAIT :    Regarder l’erreur et les notes obtenues quand on veut compiler (ci-dessous).
+          *** RESTE 2 NOTES liées aux variables dans le .GlobalEnv ***
+
+          Détail des modifs :
+#######################################################################################################################
+diff -r CoastalLight_0.6/DESCRIPTION CoastalLight/DESCRIPTION
+2,3c2,3
+< Version: 0.6
+< Date: 2020-10-08
+---
+> Version: 0.7
+> Date: 2020-11-09
+14,16c14
+< URL: https://doi.pangaea.de/10.1594/PANGAEA.910898
+< 	http://obs-vlfr.fr/Pfunction/
+< 	https://obs-vlfr.fr
+---
+> URL: https://doi.pangaea.de/10.1594/PANGAEA.910898, http://obs-vlfr.fr/Pfunction/, https://obs-vlfr.fr
+#######################################################################################################################
+diff -r CoastalLight_0.6/R/cl_DownloadData.R CoastalLight/R/cl_DownloadData.R
+36c36,38
+< #' cl_DownloadData()
+---
+> #' cl_DownloadData() # annual climatology over 21 years (1998-2018)
+> #' cl_DownloadData(month = 1) # monthly climatology (January) over 21 years (1998-2018)
+> #' cl_DownloadData(month = 8) # monthly climatology (August) over 21 years (1998-2018)
+#######################################################################################################################
+diff -r CoastalLight_0.6/R/cl_GetData.R CoastalLight/R/cl_GetData.R
+11a12
+> #'     ; unit : \eqn{decimal \, degree}
+14a16
+> #'     ; unit : \eqn{decimal \, degree}
+19a22,26
+> #'               Units : 
+> #'     depth (\eqn{m}),
+> #'     area (\eqn{km^{2}}),
+> #'     par, parbottom (\eqn{mol.photons \; m^{-2} \; d^{-1}}),
+> #'     kdpar (\eqn{m^{-1}}).
+53c60,61
+< #' ## All examples assume that data have been downloaded in directory "CoastalLight.d" with function cl_DownloadData()
+---
+> #' ## All examples assume that data have been downloaded in directory "CoastalLight.d"
+> #' ## with function cl_DownloadData()
+#######################################################################################################################
+diff -r CoastalLight_0.6/R/cl_surface.R CoastalLight/R/cl_surface.R
+20c20
+< #' @param E : [numeric] mol photons m-2 day-1
+---
+> #' @param E : [numeric] \eqn{mol.photons \; m^{-2} \; d^{-1}}
+30c30
+< #' if type == "Sg" [numeric] : an unique value (surface area of the region in km2)
+---
+> #' if type == "Sg" [numeric] : an unique value (surface area of the region in \eqn{km^{2}})
+32c32
+< #' if type == "s" [numeric vector] : surface areas in km2 receiving more than E mol photons m-2 day-1
+---
+> #' if type == "s" [numeric vector] : surface areas in \eqn{km^{2}} receiving more than E \eqn{mol.photons \; m^{-2} \; d^{-1}}
+#######################################################################################################################
+diff -r CoastalLight_0.6/R/cl_Transect.R CoastalLight/R/cl_Transect.R
+43c43
+< #' X11()
+---
+> #' #X11()
+diff -r CoastalLight_0.6/R/CoastalLight.R CoastalLight/R/CoastalLight.R
+8c8
+< #'   \item{Goal 1}{ 
+---
+> #'   \item{Goal 1}{: 
+12c12
+< #'             or the P-functions (see Gattuso et al. in prep.) for three standard regions;
+---
+> #'             or the P-functions (see Gattuso et al. - reference below) for three standard regions;
+25c25
+< #'   \item{Goal 2}{
+---
+> #'   \item{Goal 2}{:
+34a35,44
+> #' \strong{Data and units :}
+> #'   \itemize{
+> #'     \item P-functions : \%
+> #'     \item longitude : \eqn{decimal \, degree \; [-180 ; 180]}
+> #'     \item latitude : \eqn{decimal \, degree \; [-90 ; 90]}
+> #'     \item depth : \eqn{m}
+> #'     \item area : \eqn{km^{2}}
+> #'     \item par, parbottom : \eqn{mol.photons \; m^{-2} \; d^{-1}}
+> #'     \item kdpar : \eqn{m^{-1}}
+> #'   }
+37,39c47,50
+< #'             Gattuso J.-P., Gentili B., Antoine D. & Doxaran D., in prep. 
+< #'             Global distribution of light (photosynthetically active radiation) reaching the seabed. 
+< #'             Earth System Science Data.
+---
+> #'             Gattuso J.-P., Gentili B., Antoine D. & Doxaran D., 2020.
+> #'             Global distribution of photosynthetically available radiation on the seafloor.
+> #'             Earth System Science Data 12:1697-1709.
+> #'             http://dx.doi.org/10.5194/essd-12-1697-2020

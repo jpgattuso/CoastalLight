@@ -1,0 +1,18 @@
+Package: CoastalLight
+Version: 0.7
+Date: 2020-11-09
+Title: Available Light on the Coastal Ocean [0-200m] Floor
+Author: Bernard Gentili <bernard.gentili@orange.fr>, Jean-Pierre Gattuso <gattuso@obs-vlfr.fr>
+Maintainer: Bernard Gentili <bernard.gentili@orange.fr>
+Depends: R (>= 3.3.0), ncdf4, raster, sp, viridis
+Description: Satellite data collected between 1998 and 2018
+	(SeaWiFS, MODIS, MERIS, VIIRS),
+	in conjonction with GEBCO gridded bathymetric data (15 arc seconds),
+	are used to estimate, at a nearly global scale,
+	the irradiance reaching the bottom of the coastal ocean.
+License: GPL (>= 2)
+URL: https://doi.pangaea.de/10.1594/PANGAEA.910898,
+        http://obs-vlfr.fr/Pfunction/, https://obs-vlfr.fr
+RoxygenNote: 6.1.1
+NeedsCompilation: no
+Packaged: 2020-11-18 17:42:16 UTC; gentili
