@@ -19,7 +19,7 @@ This package has \strong{two goals}:
   \item get various geographic and optical data from a database consisting of files to download
 }
 \describe{
-  \item{Goal 1:}
+  \item{Goal 1:}{
   \enumerate{
       \item function \code{cl_surface()} is the main function;
             it returns the surface areas receiving irradiance above given thresholds,
@@ -35,13 +35,15 @@ This package has \strong{two goals}:
             a file containing the P-functions for this subregion;
             this file is ready to be used by the function \code{cl_surface()}.
     }
-  \item{Goal 2:}
+    }
+  \item{Goal 2:}{
     \enumerate{
       \item function \code{cl_DownloadData()} downloads the data;
       \item function \code{cl_GetData()} gets the data on a geographic zone defined by the user;
       \item function \code{cl_PlotData()} plots the data, as returned by function \code{cl_GetData()}.
       \item function \code{cl_Transect()} complements function \code{cl_GetData()}
             for the extraction of data along a transect.
+    }
     }
 }
 \strong{Data and units}:
