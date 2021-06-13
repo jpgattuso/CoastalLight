@@ -45,6 +45,7 @@
 #' tr <- cl_Transect(gabes, vertices, plt = TRUE)
 #' cl_PlotData(tr)
 cl_Transect <- function(x, vertices, plt = FALSE) {
+	stat <- x$stat
 	if(x$type != "Area") {
 		cat("the type must be \"Area\"\n")
 		return(invisible(NULL))
@@ -92,5 +93,5 @@ cl_Transect <- function(x, vertices, plt = FALSE) {
 			dists <- append(dists, dst)
 		}
 	}
-	return(list(type = "Transect", lon = x$lon, lat = x$lat, distances = dists, data = vals))
+	return(list(type = "Transect", lon = x$lon, lat = x$lat, distances = dists, data = vals, stat = stat))
 }

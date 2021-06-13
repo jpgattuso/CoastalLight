@@ -35,6 +35,7 @@ cl_PlotData <- function(x, vertices = NULL) {
 	type <- x$type
 	lon <- x$lon
 	lat <- x$lat
+	stat <- x$stat
 	what <- colnames(x$data)
 	what <- what[! what %in% c("longitude", "latitude")]
 	what.all <- c("depth", "area", "par", "kdpar", "parbottom")
@@ -65,6 +66,7 @@ cl_PlotData <- function(x, vertices = NULL) {
 		minkdpar <- NA; maxkdpar <- NA
 		if("kdpar" %in% what) {
 			vkdpar <- values(s[["kdpar"]])
+			vkdpar[vkdpar < 1.e-6] <- NA
 			minkdpar <- min(vkdpar, na.rm = TRUE)
 			maxkdpar <- max(vkdpar, na.rm = TRUE)
 		}
@@ -75,8 +77,10 @@ cl_PlotData <- function(x, vertices = NULL) {
 			maxparbottom <- max(vparbottom, na.rm = TRUE)
 		}
 		log.all <- c("", "", "", "y", "y"); names(log.all) <- what.all
-		min.all <- c(max(pdepth[1], -200), parea[1],             ppar[1],            minkdpar,  minparbottom); names(min.all) <- what.all
-		max.all <- c(0,                    parea[length(parea)], ppar[length(ppar)], maxkdpar,  maxparbottom); names(max.all) <- what.all
+#		min.all <- c(max(pdepth[1], -200), parea[1],             ppar[1],            minkdpar,  minparbottom); names(min.all) <- what.all
+		min.all <- c(pdepth[1], parea[1],             ppar[1],            minkdpar,  minparbottom); names(min.all) <- what.all
+#		max.all <- c(0,                    parea[length(parea)], ppar[length(ppar)], maxkdpar,  maxparbottom); names(max.all) <- what.all
+		max.all <- c(pdepth[length(pdepth)], parea[length(parea)], ppar[length(ppar)], maxkdpar,  maxparbottom); names(max.all) <- what.all
 		by.all <- c(ddepth, darea, dpar, NA, NA); names(by.all) <- what.all
 		ticks.all <- list(NA, NA, NA, c(0.02, 0.03, 0.05, 0.07, 0.1, 0.2, 0.3, 0.5, 0.7, 1), c(0.001, 0.01, 0.1, 1, 10)); names(ticks.all) <- what.all
 		cs.all <- list(viridis, cividis, plasma, plasma, plasma); names(cs.all) <- what.all
@@ -95,16 +99,16 @@ cl_PlotData <- function(x, vertices = NULL) {
 				}
 				arg <- list(at = at, labels=10**at)
 				col <- cs.all[[w]](length(brk) - 1)
-				if(is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
-				if(!is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90", addfun = function() lines(transect))
+				if(is.null(vertices)) plot(r, main = paste(w, " (", stat, ") ", sep = ""), col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
+				if(!is.null(vertices)) plot(r, main = paste(w, " (", stat, ") ", sep = ""), col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90", addfun = function() lines(transect))
 			}
 			if(log.all[w] == "") {
 				brk <- seq(min.all[w], max.all[w],, 50)
 				at <- seq(min(brk), max(brk), by = by.all[w])
 				arg <- list(at = at, labels=at)
 				col <- cs.all[[w]](length(brk) - 1)
-				if(is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
-				if(!is.null(vertices)) plot(r, main = w, col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90", addfun = function() lines(transect))
+				if(is.null(vertices)) plot(r, main = paste(w, " (", stat, ") ", sep = ""), col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90")
+				if(!is.null(vertices)) plot(r, main = paste(w, " (", stat, ") ", sep = ""), col = col, breaks=brk, axis.args=arg, legend.shrink = 1, colNA = "grey90", addfun = function() lines(transect))
 			}
 		}
 		return(s)
@@ -114,8 +118,16 @@ cl_PlotData <- function(x, vertices = NULL) {
 	log.all <- c("", "", "y", "y", "y"); names(log.all) <- what.all
 	lin.all <- c(0, 3, 6, 0, 3); names(lin.all) <- what.all
 	sid.all <- c(2, 2, 2, 4, 4); names(sid.all) <- what.all
-	min.all <- c(-200, 0.02,  0.001, 0.02,  0.001); names(min.all) <- what.all
-	max.all <- c(   0, 0.22,100.000, 1.43,100.000); names(max.all) <- what.all
+#	min.all <- c(-200, 0.02,  0.001, 0.02,  0.001); names(min.all) <- what.all
+	pdepth <- NA; ddepth <- NA
+	if("depth" %in% what) {
+		vdepth <- x$data[, "depth"]
+		pdepth <- pretty(vdepth)
+		ddepth <- diff(pdepth)[1]
+	}
+	min.all <- c(pdepth[1],              0.02,  0.001, 0.02,  1.e-4); names(min.all) <- what.all
+#	max.all <- c(   0, 0.22,100.000, 1.43,100.000); names(max.all) <- what.all
+	max.all <- c(pdepth[length(pdepth)], 0.22,100.000, 1.43,100.000); names(max.all) <- what.all
 	insert.na <- function(dum1, i.br) {
 		i.deb <- c(0, i.br) + 1
 		i.fin <- c(i.br, length(dum1))
@@ -137,7 +149,7 @@ cl_PlotData <- function(x, vertices = NULL) {
 		par(mai = par("mai") * c(1, 2, 1, 3), mgp = par("mgp") / 2)
 		plot(u, rep(0, length(u)), type = "n", axes = FALSE, xlab = "longitude", ylab = "",
 			xlim = lon,
-			main = paste("latitude", round(x$data[1, "latitude"], digits = 5)))
+			main = paste("latitude", round(x$data[1, "latitude"], digits = 5), "-", stat))
 		box()
 		axis(1)
 		for(w in what) {
@@ -162,7 +174,7 @@ cl_PlotData <- function(x, vertices = NULL) {
 		par(mai = par("mai") * c(1, 2, 1, 3), mgp = par("mgp") / 2)
 		plot(u, rep(0, length(u)), type = "n", axes = FALSE, xlab = "latitude", ylab = "",
 			xlim = lat,
-			main = paste("longitude", round(x$data[1, "longitude"], digits = 5)))
+			main = paste("longitude", round(x$data[1, "longitude"], digits = 5), "-", stat))
 		box()
 		axis(1)
 		for(w in what) {
@@ -185,7 +197,7 @@ cl_PlotData <- function(x, vertices = NULL) {
 		par(mai = par("mai") * c(1, 2, 1, 3), mgp = par("mgp") / 2)
 		plot(u, rep(0, length(u)), type = "n", axes = FALSE, xlab = "distance [km]", ylab = "",
 			xlim = range(u),
-			main = "")
+			main = stat)
 		box()
 		axis(1)
 		for(w in what) {

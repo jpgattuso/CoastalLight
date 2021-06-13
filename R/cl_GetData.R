@@ -32,14 +32,23 @@
 #' @param month : [integer] : the decimal value of the month ([0-12] of interest. 0 indicate
 #'                the climatology over 21 years (1998-2018), 1 is January, ...
 #'
-#' @return : [list] a list with 4 components :
+#' @param stat : [character] the statistical value you want for variables "par", "kdpar" and "parbottom";
+#'               choose one among "mean" (mean value),
+#'               "min" (minimum), "max" (maximum), "sd" (standard deviation)
+#'                 (default = "mean")
+#' N.B. : "min", "max", "sd", are available only at URL \preformatted{
+#'         http://obs-vlfr.fr/Pfunction/
+#'                       } 
+#'
+#' @return : [list] a list with 5 components :
 #'           \itemize{
 #'              \item \code{type} : the type of geographical zone :
 #'                           "Point", "LonTransect", "LatTransect" or "Area"
 #'              \item \code{lon} : the lon argument as passed to the function
 #'              \item \code{lat} : the lat argument as passed to the function
 #'              \item \code{data} : a matrix of data with columns names "longitude", "latitude",
-#'                          and variables requested. 
+#'                          and variables requested
+#'              \item \code{stat} : see argument \code{stat} ("mean", "min", "max", or "sd")
 #'           }
 #'
 #' @details 
@@ -74,7 +83,7 @@
 #' lat.transect <- cl_GetData(lon = c(12), lat = c(32.5, 36), dir = "./CoastalLight.d", month = 8)
 #' par(mfrow = c(1,1))
 #' cl_PlotData(lat.transect)
-cl_GetData <- function(lon, lat, what = c("depth", "area", "par", "kdpar", "parbottom"), dirdata = "CoastalLight.d", month = 0) {
+cl_GetData <- function(lon, lat, what = c("depth", "area", "par", "kdpar", "parbottom"), dirdata = "CoastalLight.d", month = 0, stat = "mean") {
 	what.all <- c("depth", "area", "par", "kdpar", "parbottom")
 	what.geo <- c("longitude", "latitude", "depth", "area")
 	whatll <- c("longitude", "latitude", what)
@@ -147,7 +156,8 @@ cl_GetData <- function(lon, lat, what = c("depth", "area", "par", "kdpar", "parb
 	cat("Data type :", type, "\n")
 	i <- clu_PixelNumbers(lonmin, lonmax, latmin, latmax, dirdata, type)
 	if(is.null(i)) {
-		cat("!!! Your zone : long.", lon, "   /   ", "lat.", lat, "is outside Coastal Zone [0; 200m]\n")
+#		cat("!!! Your zone : long.", lon, "   /   ", "lat.", lat, "is outside Coastal Zone [0; 200m]\n")
+		cat("!!! Your zone : long.", lon, "   /   ", "lat.", lat, "is outside Coastal Zone\n")
 		return(list(type = type, lon = lon, lat = lat, data = retNA))
 	} else {
 		whatll <- c("longitude", "latitude", what)
@@ -169,12 +179,29 @@ cl_GetData <- function(lon, lat, what = c("depth", "area", "par", "kdpar", "parb
 		for(w in ws) {
 			cmonth <- formatC(month, width = 2, flag = "0")
 			envir.month <- paste("envir.opt", cmonth, sep = "")
-			if(! exists(envir.month)) {
+			if(exists(envir.month)) {
+				if(! exists("stat", envir = get(envir.month, envir = .GlobalEnv), inherits = FALSE)) {
+					rm(list = ls(get(envir.month, envir = .GlobalEnv)),
+						envir = get(envir.month, envir = .GlobalEnv), inherits = FALSE)
+				} else {
+					stat.actual <- get("stat", envir = get(envir.month, envir = .GlobalEnv))
+					if(stat.actual != stat) {
+						rm(list = ls(get(envir.month, envir = .GlobalEnv)),
+							envir = get(envir.month, envir = .GlobalEnv), inherits = FALSE)
+					}
+				}
+				assign("stat", stat, envir = get(envir.month, envir = .GlobalEnv))
+			} else {
 				assign(envir.month, new.env(), envir = .GlobalEnv)
+				assign("stat", stat, envir = get(envir.month, envir = .GlobalEnv))
 			}
 			if(! exists(w, envir = get(envir.month, envir = .GlobalEnv), inherits = FALSE)) {
 				if(! IsOpenNCfile) {
-					f <- paste(dirdata, paste("CoastalLight_", cmonth, ".nc", sep = ""), sep = "/")
+					if(stat == "mean") {
+						f <- paste(dirdata, paste("CoastalLight_", cmonth, ".nc", sep = ""), sep = "/")
+					} else {
+						f <- paste(dirdata, paste("CoastalLight_", stat, "_", cmonth, ".nc", sep = ""), sep = "/")
+					}
 					if(! file.exists(f)) {
 						cat("!!! no such file :", f, "\n")
 						cat("!!! You have to *** download *** it with function cl_DownloadData()\n")
@@ -210,6 +237,6 @@ cl_GetData <- function(lon, lat, what = c("depth", "area", "par", "kdpar", "parb
 #		} else {
 #			s <- NULL
 #		}
-		return(list(type = type, lon = lon, lat = lat, data = ret))
+		return(list(type = type, lon = lon, lat = lat, data = ret, stat = stat))
 	}
 }

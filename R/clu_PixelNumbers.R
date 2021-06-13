@@ -22,7 +22,21 @@
 #!##' Not called by the user.
 clu_PixelNumbers <- function(lonmin, lonmax, latmin, latmax, dirdata, type) {
 	reso <- 1./240.
-	if(! exists("envir.geo")) {
+	newdatadir <- FALSE
+	if(exists("envir.geo")) {
+		dirdata.actual <- get("dirdata", envir = get("envir.geo", envir = .GlobalEnv))
+		if(! dirdata.actual == dirdata) {
+			rm(list = ls(get("envir.geo", envir = .GlobalEnv)),
+				envir = get("envir.geo", envir = .GlobalEnv), inherits = FALSE)
+			assign("dirdata", dirdata, envir = get("envir.geo", envir = .GlobalEnv))
+			newdatadir <- TRUE
+			cat("changing data directory from :", dirdata.actual, "to :", dirdata, sep = "\n")
+		} else {
+			longitude <- get("longitude", envir = envir.geo, inherits = FALSE)
+			latitude <- get("latitude", envir = envir.geo, inherits = FALSE)
+		}
+	}
+	if(! exists("envir.geo") || newdatadir) {
 		f <- paste(dirdata, "CoastalLight_geo.nc", sep = "/")
 		if(! file.exists(f)) {
 			cat("!!! no such file :", f, "\n")
@@ -39,9 +53,12 @@ clu_PixelNumbers <- function(lonmin, lonmax, latmin, latmax, dirdata, type) {
 		assign("nc.geo", nc.geo, envir = envir.geo)
 		assign("longitude", longitude, envir = envir.geo)
 		assign("latitude", latitude, envir = envir.geo)
-	} else {
-		longitude <- get("longitude", envir = envir.geo, inherits = FALSE)
-		latitude <- get("latitude", envir = envir.geo, inherits = FALSE)
+		assign("dirdata", dirdata, envir = envir.geo)
+
+		envirs.opt <- ls(envir = .GlobalEnv, pattern = "envir.opt")
+		for(e in envirs.opt) {
+			rm(list = ls(get(e, envir = .GlobalEnv)), envir = get(e, envir = .GlobalEnv), inherits = FALSE)
+		}
 	}
 	i <- longitude >= lonmin & longitude <= lonmax
 	j <- latitude >= latmin & latitude <= latmax
