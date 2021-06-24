@@ -37,5 +37,5 @@ plot differ depending on the field \code{type} of this list :
   }
 }
 \examples{
-## See function \\code{cl_GetData()} examples
+## See function \code{cl_GetData()} examples
 }

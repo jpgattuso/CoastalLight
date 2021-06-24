@@ -43,7 +43,8 @@
 #' cl_DownloadData() # annual climatology over 21 years (1998-2018)
 #' cl_DownloadData(month = 1) # monthly climatology (January) over 21 years (1998-2018)
 #' cl_DownloadData(month = 8) # monthly climatology (August) over 21 years (1998-2018)
-#' cl_DownloadData(month = 8, stat = "sd") # idem, but download standard deviation of optical parameters
+#' cl_DownloadData(month = 8, stat = "sd") # idem, 
+#' but download standard deviation of optical parameters
 cl_DownloadData <- function(month = 0, DownloadGeo = TRUE, dirdata = "CoastalLight.d", alt = 0, stat = "mean") {
 	urlobsvlfr <- "http://obs-vlfr.fr/Pfunction/"
 	urlpangaea <- "https://doi.pangaea.de/10.1594/PANGAEA.910898"

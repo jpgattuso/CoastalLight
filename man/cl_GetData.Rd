@@ -4,8 +4,14 @@
 \alias{cl_GetData}
 \title{Get Data}
 \usage{
-cl_GetData(lon, lat, what = c("depth", "area", "par", "kdpar",
-  "parbottom"), dirdata = "CoastalLight.d", month = 0)
+cl_GetData(
+  lon,
+  lat,
+  what = c("depth", "area", "par", "kdpar", "parbottom"),
+  dirdata = "CoastalLight.d",
+  month = 0,
+  stat = "mean"
+)
 }
 \arguments{
 \item{lon}{: [numeric] longitude, vector of length 1 or 2,
@@ -32,16 +38,25 @@ are stored. (default = "./CoastalLight.d");}
 
 \item{month}{: [integer] : the decimal value of the month ([0-12] of interest. 0 indicate
 the climatology over 21 years (1998-2018), 1 is January, ...}
+
+\item{stat}{: [character] the statistical value you want for variables "par", "kdpar" and "parbottom";
+              choose one among "mean" (mean value),
+              "min" (minimum), "max" (maximum), "sd" (standard deviation)
+                (default = "mean")
+N.B. : "min", "max", "sd", are available only at URL \preformatted{
+        http://obs-vlfr.fr/Pfunction/
+                      }}
 }
 \value{
-: [list] a list with 4 components :
+: [list] a list with 5 components :
           \itemize{
              \item \code{type} : the type of geographical zone :
                           "Point", "LonTransect", "LatTransect" or "Area"
              \item \code{lon} : the lon argument as passed to the function
              \item \code{lat} : the lat argument as passed to the function
              \item \code{data} : a matrix of data with columns names "longitude", "latitude",
-                         and variables requested. 
+                         and variables requested
+             \item \code{stat} : see argument \code{stat} ("mean", "min", "max", or "sd")
           }
 }
 \description{

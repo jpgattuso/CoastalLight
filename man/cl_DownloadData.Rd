@@ -5,8 +5,13 @@
 \title{Download files from pangaea : \preformatted{https://doi.pangaea.de/10.1594/PANGAEA.910898}
 otherwise from \preformatted{http://obs-vlfr.fr/Pfunction/}}
 \usage{
-cl_DownloadData(month = 0, DownloadGeo = TRUE,
-  dirdata = "CoastalLight.d", alt = 0)
+cl_DownloadData(
+  month = 0,
+  DownloadGeo = TRUE,
+  dirdata = "CoastalLight.d",
+  alt = 0,
+  stat = "mean"
+)
 }
 \arguments{
 \item{month}{: [integer] decimal month (0-12). Default = 0.
@@ -33,6 +38,14 @@ longitude, latitude, depth and surface area of the pixels, mandatory for retriev
 }
 N.B. : if you choose a manual download (alt = 1 or 2), you have to download files in the appropriate directory,
        i.e. the argument \code{dirdata} has no effect.}
+
+\item{stat}{: [character] the statistical value you want for variables "par", "kdpar" and "parbottom";
+              choose one among "mean" (mean value),
+              "min" (minimum), "max" (maximum), "sd" (standard deviation)
+                (default = "mean")
+N.B. : "min", "max", "sd", are available only at URL \preformatted{
+        http://obs-vlfr.fr/Pfunction/
+                      }}
 }
 \value{
 : none
@@ -44,4 +57,6 @@ Download files used by \code{cl_GetData()} function.
 cl_DownloadData() # annual climatology over 21 years (1998-2018)
 cl_DownloadData(month = 1) # monthly climatology (January) over 21 years (1998-2018)
 cl_DownloadData(month = 8) # monthly climatology (August) over 21 years (1998-2018)
+cl_DownloadData(month = 8, stat = "sd") # idem, 
+but download standard deviation of optical parameters
 }
